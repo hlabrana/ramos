@@ -92,15 +92,18 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 			.attr("y", posY)
 			.attr("width", sizeX*1.2)
 			.attr("height", sizeY)
-			.attr("fill", 'white')
-			.attr("opacity", "0.001")
+			.attr("fill", 'gray')
+			.attr("opacity", "1")
 			.attr("class", "non-approved");
 
 		var cross = ramo.append('g').attr("class", "cross").attr("opacity", 0);
-		cross.append("path")
-			.attr("d", "M" + posX + "," + posY + "L" + (posX+sizeX*1.1) + "," + (posY+sizeY))
-			.attr("stroke", "#550000")
-			.attr("stroke-width", 9);
+		cross.append("rect")
+			.attr("x", posX)
+			.attr("y", posY)
+			.attr("width", sizeX*1.2)
+			.attr("height", sizeY)
+			.attr("fill", 'white')
+			.attr("opacity", "0.9")
 
 		// id
 		ramo.append("circle")
@@ -134,7 +137,7 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 				variantX = 1;
 				variantY--;
 			}
-			ramo.append("circle")
+			ramo.append("circle").attr("class", "prerr")
 				.attr('cx', posX + r + c_x + variantX)
 				.attr('cy', posY + sizeY - graybar/2)
 				.attr('r', r)
@@ -159,9 +162,11 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 	this.approveRamo = function() {
 			if (!approved) {
 				d3.select("#" + self.sigla).select(".cross").transition().delay(20).attr("opacity", "1");
+				d3.select("#" + self.sigla).select(".prerr").transition().delay(20).attr("opacity", "0");
 				APPROVED.push(self);
 			} else {
-				d3.select("#" + self.sigla).select(".cross").transition().delay(20).attr("opacity", "0.01");
+				d3.select("#" + self.sigla).select(".cross").transition().delay(20).attr("opacity", "0");
+				d3.select("#" + self.sigla).select(".prerr").transition().delay(20).attr("opacity", "1");
 				let _i = APPROVED.indexOf(self)
 				if (_i > -1) {
 					APPROVED.splice(_i, 1);

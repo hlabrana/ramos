@@ -126,6 +126,7 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 
 		// prerr circles!
 		let c_x = 0;
+		let count=0;
 		self.prer.forEach(function(p) {
 			let r = 9,
 			fontsize = 12,
@@ -137,12 +138,13 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 				variantX = 1;
 				variantY--;
 			}
-			ramo.append("circle").attr("class", "prerr")
+			ramo.append("circle").attr("class", "prerr"+count)
 				.attr('cx', posX + r + c_x + variantX)
 				.attr('cy', posY + sizeY - graybar/2)
 				.attr('r', r)
 				.attr('fill', colorBySector[all_ramos[p].sector][0])
-				.attr('stroke', 'white');
+				.attr('stroke', 'white')
+				.attr('opacity','1');
 			ramo.append('text')
 				.attr('x', posX + r + c_x + variantX)
 				.attr('y', posY + sizeY - graybar/2 + variantY)
@@ -152,6 +154,7 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 				.attr("font-size", fontsize)
 				.attr('fill', 'white');
 			c_x += r*2;
+			count++;
 		});
 
 		ramo.on('click', self.approveRamo);
@@ -162,11 +165,13 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 	this.approveRamo = function() {
 			if (!approved) {
 				d3.select("#" + self.sigla).select(".cross").transition().delay(20).attr("opacity", "1");
-				d3.select("#" + self.sigla).select(".prerr").transition().delay(20).attr("opacity", "0");
+				d3.select("#" + self.sigla).select(".prerr"+0).transition().delay(20).attr("opacity", "0");
+				d3.select("#" + self.sigla).select(".prerr"+1).transition().delay(20).attr("opacity", "0");
 				APPROVED.push(self);
 			} else {
 				d3.select("#" + self.sigla).select(".cross").transition().delay(20).attr("opacity", "0");
-				d3.select("#" + self.sigla).select(".prerr").transition().delay(20).attr("opacity", "1");
+				d3.select("#" + self.sigla).select(".prerr"+0).transition().delay(20).attr("opacity", "1");
+				d3.select("#" + self.sigla).select(".prerr"+1).transition().delay(20).attr("opacity", "1");
 				let _i = APPROVED.indexOf(self)
 				if (_i > -1) {
 					APPROVED.splice(_i, 1);
@@ -187,7 +192,7 @@ function Ramo(nombre, sigla, creditos, sector, prer=[], id, colorBySector) {
 				return;
 			}
 		}
-		ramo.select(".non-approved").transition().duration(70).attr("opacity", "0.0");
+		ramo.select(".non-approved").transition().duration(70).attr("opacity", "0");
 	}
 
 	// Lo necesito
